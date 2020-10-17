@@ -1,15 +1,5 @@
 <template>
   <div class="page-login">
-    <div class="page-login--layer page-login--layer-area">
-      <ul class="circles">
-        <li v-for="n in 10" :key="n"></li>
-      </ul>
-    </div>
-    <div
-      class="page-login--layer page-login--layer-time"
-      flex="main:center cross:center">
-      {{time}}
-    </div>
     <div class="page-login--layer">
       <div
         class="page-login--content"
@@ -88,7 +78,6 @@
     data() {
       return {
         timeInterval: null,
-        time: dayjs().format('HH:mm:ss'),
         captchaImage: '',
         image_uuid: '',
         // 表单
@@ -220,13 +209,6 @@
       overflow: hidden;
     }
 
-    // 时间
-    .page-login--layer-time {
-      font-size: 24em;
-      font-weight: bold;
-      color: rgba(0, 0, 0, 0.03);
-      overflow: hidden;
-    }
 
     // 登陆页面控件的容器
     .page-login--content {
@@ -292,36 +274,6 @@
 
       .page-login--quick {
         width: 100%;
-      }
-    }
-
-    // 快速选择用户面板
-    .page-login--quick-user {
-      @extend %flex-center-col;
-      padding: 10px 0px;
-      border-radius: 4px;
-
-      &:hover {
-        background-color: $color-bg;
-
-        i {
-          color: $color-text-normal;
-        }
-
-        span {
-          color: $color-text-normal;
-        }
-      }
-
-      i {
-        font-size: 36px;
-        color: $color-text-sub;
-      }
-
-      span {
-        font-size: 12px;
-        margin-top: 10px;
-        color: $color-text-sub;
       }
     }
 

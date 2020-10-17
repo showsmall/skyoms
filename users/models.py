@@ -7,7 +7,7 @@ class UserMenu(models.Model):
     index = models.IntegerField(default=999, verbose_name=u'菜单索引', help_text=u'决定菜单显示顺序')
     path = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'菜单路径')
     title = models.CharField(max_length=20, verbose_name=u'菜单名称')
-    icon = models.CharField(max_length=10, null=True, blank=True, verbose_name=u'菜单图标')
+    icon = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'菜单图标')
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children', verbose_name=u'父级菜单')
     permission = models.ForeignKey(Permission, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=u'菜单关联权限')
 
@@ -29,11 +29,11 @@ class UserMenu(models.Model):
         """
         if self.children.all():
             if self.icon:
-                return {'index': self.index, 'title': self.title, 'icon': self.icon, 'children': {}}
+                return {'index': self.index, 'title': self.title, 'iconSvg': self.icon, 'children': {}}
             else:
                 return {'index': self.index, 'title': self.title, 'children': {}}
         else:
-            return {'index': self.index, 'title': self.title, 'path': self.path}
+            return {'index': self.index, 'title': self.title, 'path': self.path,'iconSvg': self.icon}
 
     def is_root_menu(self):
         """是否根节点菜单"""

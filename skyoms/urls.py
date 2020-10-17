@@ -15,8 +15,14 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path,include
+
 from rest_framework.documentation import include_docs_urls
 from django.views.generic.base import TemplateView
+
+
+
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # django默认认证
@@ -24,5 +30,7 @@ urlpatterns = [
     #rest文档页
     path('docs/',include_docs_urls(title="devops")),
     path('users/', include('users.urls')),
+    path('vms/',include('vms.urls')),
+    path('assets/',include('assets.urls')),
     path('', TemplateView.as_view(template_name='index.html')),
 ]

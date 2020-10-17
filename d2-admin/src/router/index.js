@@ -26,7 +26,7 @@ Vue.use(VueRouter)
 // 导出路由 在 main.js 里使用
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'hash'
 })
 
 

@@ -130,7 +130,7 @@ class ListUserMenu(APIView):
     authentication_classes = (ExpireTokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request, version):
+    def post(self, request):
         result = {
             'code': 0,
             'msg': '请求成功',
@@ -158,7 +158,7 @@ class ListUserRouter(APIView):
     authentication_classes = (ExpireTokenAuthentication,)
     permission_classes = (permissions.IsAuthenticated,)
 
-    def post(self, request, version):
+    def post(self, request):
         result = {
             'code': 0,
             'msg': '请求成功',

@@ -8,15 +8,19 @@ import d2Admin from '@/plugin/d2admin'
 import store from '@/store/index'
 // d2-crud表格插件
 import D2Crud from '@d2-projects/d2-crud'
+// 图标
+// import '@/assets/icon/iconfont.css'
 
 Vue.use(D2Crud)
 
+// v-charts
+import VCharts from 'v-charts'
+Vue.use(VCharts)
 
 // 菜单和路由设置
 import router from './router'
 import menuHeader from '@/menu/header'
 import menuAside from '@/menu/aside'
-import {frameInRoutes} from '@/router/routes'
 import util from '@/libs/util.js'
 
 // 核心插件

@@ -26,7 +26,7 @@ SECRET_KEY = '623j)#lpzaybe0bat3b=#c#bjk6i%n5xue&10(xi_$@ep297%9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -43,6 +43,8 @@ INSTALLED_APPS = [
     'django_filters',
     'rest_framework.authtoken',
     'users.apps.UsersConfig',
+    'vms.apps.VmsConfig',
+    'assets.apps.AssetsConfig',
 ]
 
 AUTH_USER_MODEL ='users.Userprofile'
