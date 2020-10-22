@@ -1,16 +1,13 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 from datetime import datetime
-from django.utils.text import slugify
-import uuid
-import random
-import string
+from tyadmin_api_cli.contants import MAIN_DISPLAY
 # Create your models here.
 
 
 class IDC(models.Model):
     name = models.CharField(max_length=32, unique=True, verbose_name=u'机房', error_messages={'unique': '该机房已存在，请不要重复添加'})
-    servers = models.ManyToManyField('Hosts')
+    servers = models.ManyToManyField('Hosts',verbose_name='主机', help_text=f'{MAIN_DISPLAY}__name')
     ctime = models.DateTimeField(default=datetime.now, verbose_name=u'创建时间')
     utime = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
 
@@ -55,7 +52,7 @@ class Hosts(models.Model):
 
 class HostGroup(models.Model):
     name = models.CharField(max_length=32,verbose_name=u'主机组名',unique=True)
-    host = models.ManyToManyField('Hosts')
+    host = models.ManyToManyField('Hosts',verbose_name='主机', help_text=f'{MAIN_DISPLAY}__name')
     ctime = models.DateTimeField(default=datetime.now,verbose_name=u'创建时间')
     utime = models.DateTimeField(auto_now=True,verbose_name=u'更新时间')
     def __str__(self):

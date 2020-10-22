@@ -1,7 +1,7 @@
 from django.db import models
 from datetime import datetime
 # Create your models here.
-
+from tyadmin_api_cli.contants import MAIN_DISPLAY
 
 class DataCenters(models.Model):
     '''数据中心'''
@@ -30,7 +30,7 @@ class DataCenters(models.Model):
 class Clusters(models.Model):
     '''集群'''
     name = models.CharField(max_length=128,verbose_name=u'集群名',unique=True)
-    datacenter = models.ForeignKey('DataCenters',verbose_name=u'数据中心',on_delete=models.CASCADE)
+    datacenter = models.ForeignKey('DataCenters',verbose_name=u'数据中心',on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
     numshosts = models.SmallIntegerField(verbose_name=u'宿主机数量')
     cputotal = models.CharField(max_length=64, verbose_name=u'CPU总计')
     cpuusage = models.CharField(max_length=64, verbose_name=u'CPU使用量')
@@ -52,7 +52,7 @@ class Clusters(models.Model):
 class DataStores(models.Model):
     '''存储'''
     name = models.CharField(max_length=32,verbose_name=u'存储名')
-    datacenter = models.ForeignKey('DataCenters', verbose_name=u"数据中心",on_delete=models.CASCADE)
+    datacenter = models.ForeignKey('DataCenters', verbose_name=u"数据中心",on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
     capacity = models.CharField(max_length=64,verbose_name=u'存储总量')
     freespace = models.CharField(max_length=64,verbose_name=u'存储剩余')
     desc = models.TextField(verbose_name=u'描述', blank=True, null=True)
@@ -70,7 +70,7 @@ class DataStores(models.Model):
 class NetworkAdapters(models.Model):
     '''网络'''
     name = models.CharField(max_length=64,verbose_name=u'分布式交换机名')
-    datacenter = models.ForeignKey('DataCenters', verbose_name=u'数据中心',on_delete=models.CASCADE)
+    datacenter = models.ForeignKey('DataCenters', verbose_name=u'数据中心',on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
     vlanid = models.CharField(max_length=32,verbose_name=u'VlanID')
     type = models.CharField(max_length=32,verbose_name=u'类型')
     desc = models.TextField(verbose_name=u'描述', blank=True, null=True)
@@ -86,10 +86,10 @@ class NetworkAdapters(models.Model):
 class Dedicatedhosts(models.Model):
     '''宿主机'''
     name = models.CharField(max_length=32,verbose_name=u'主机名',unique=True)
-    cluster = models.ForeignKey('Clusters',verbose_name=u'集群',on_delete=models.CASCADE)
-    datacenter = models.ForeignKey(DataCenters,verbose_name="数据中心",on_delete=models.CASCADE)
-    network = models.ManyToManyField('NetworkAdapters',verbose_name=u'网络')
-    datastore = models.ManyToManyField('DataStores',verbose_name=u'存储')
+    cluster = models.ForeignKey('Clusters',verbose_name=u'集群',on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
+    datacenter = models.ForeignKey(DataCenters,verbose_name="数据中心",on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
+    network = models.ManyToManyField('NetworkAdapters',verbose_name=u'网络', help_text=f'{MAIN_DISPLAY}__name')
+    datastore = models.ManyToManyField('DataStores',verbose_name=u'存储', help_text=f'{MAIN_DISPLAY}__name')
     conState = models.CharField(max_length=32,verbose_name=u'连接状态')
     powerState = models.CharField(max_length=32,verbose_name=u'电源状态')
     uuid = models.CharField(max_length=128,verbose_name=u'UUID')
@@ -115,12 +115,12 @@ class VirtualHosts(models.Model):
     '''虚拟机'''
     name = models.CharField(max_length=128,verbose_name=u'虚拟机名称')
     ip = models.CharField(max_length=64,verbose_name=u'宿主机IP')
-    datacenter = models.ForeignKey('DataCenters',on_delete=models.CASCADE)
+    datacenter = models.ForeignKey('DataCenters',on_delete=models.CASCADE, help_text=f'{MAIN_DISPLAY}__name')
     conState = models.CharField(max_length=32,verbose_name=u'连接状态')
     powerState = models.CharField(max_length=32,verbose_name=u'电源状态')
     cpunums = models.SmallIntegerField(verbose_name=u'CPU数量')
     memtotal = models.CharField(max_length=32,verbose_name=u'总内存')
-    network = models.ManyToManyField('NetworkAdapters')
+    network = models.ManyToManyField('NetworkAdapters',verbose_name='网络',help_text=f'{MAIN_DISPLAY}__name')
     os = models.CharField(max_length=64,verbose_name=u'系统名称')
     cpuusage = models.CharField(max_length=32,verbose_name=u'CPU使用量')
     memusage = models.CharField(max_length=32,verbose_name=u'内存使用量')

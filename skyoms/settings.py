@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'vms.apps.VmsConfig',
     'assets.apps.AssetsConfig',
-    'django_celery_beat',
+    #'django_celery_beat',
     'tyadmin_api_cli',
+    'captcha',
+    'tyadmin_api'
 ]
 
 AUTH_USER_MODEL ='users.Userprofile'

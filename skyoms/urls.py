@@ -33,6 +33,7 @@ urlpatterns = [
     path('users/', include('users.urls')),
     path('vms/',include('vms.urls')),
     path('assets/',include('assets.urls')),
+    path('api/xadmin/v1/', include('tyadmin_api.urls')),
     #文件
     path('media/<path:path>',serve,{'document_root':MEDIA_ROOT}),
     path('', TemplateView.as_view(template_name='index.html')),
