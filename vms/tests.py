@@ -1,16 +1,10 @@
 from django.test import TestCase
-from .models import Clusters
+
 # Create your tests here.
+from vms.models import DataCenters
 
-clusters = Clusters.objects.all()
-
-json_list =[]
-json_dict ={}
-for c in clusters:
-    json_dict["virtual"] = c.vmscount
-    json_dict["py"] = c.numshosts
+datacenter = DataCenters.objects.filter(name='Datacenter_201_1').values(id)
 
 
-
-
+print(datacenter)
 

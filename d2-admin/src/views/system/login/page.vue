@@ -25,7 +25,7 @@
                   <el-input
                     type="text"
                     v-model="formLogin.username"
-                    placeholder="用户名">
+                    placeholder="请输入用户名或邮箱">
                     <i slot="prepend" class="fa fa-user-circle-o"></i>
                   </el-input>
                 </el-form-item>
@@ -33,8 +33,9 @@
                   <el-input
                     type="password"
                     v-model="formLogin.password"
-                    placeholder="密码">
+                    placeholder="请输入密码">
                     <i slot="prepend" class="fa fa-keyboard-o"></i>
+                    <d2-icon name=""/>
                   </el-input>
                 </el-form-item>
                 <el-form-item prop="code">

@@ -72,7 +72,7 @@ class VirtualHostsViewSet(viewsets.ModelViewSet):
 import json
 class GetClusterHost(View):
     '''
-    列出所有群集中虚拟机和宿主机的数量，前端Dashboard图标展示
+    列出所有群集中虚拟机和宿主机的数量，前端Dashboard展示
     '''
     def get(self,request):
         json_list =[]
@@ -85,3 +85,40 @@ class GetClusterHost(View):
             json_list.append(json_dict)
         return HttpResponse(json.dumps(json_list),content_type='application/json')
 
+import re
+class GetDedicatedhostResource(View):
+    '''
+    列出宿主机内存、cpu使用量，用于Dashboard展示
+    '''
+    def get(self,request):
+        json_list = []
+        hosts = Dedicatedhosts.objects.all()
+        for h in  hosts:
+            json_dict ={}
+            json_dict["主机名"] = h.name
+            json_dict["cpu总计/GHz"] = float(re.sub('[^0-9.]',"",h.cputotal))
+            json_dict["cpu已用/GHz"] = float(re.sub('[^0-9.]',"",h.cpuusage))
+            json_dict["内存总计/G"] = float(re.sub('[^0-9.]',"",h.memtotal))
+            json_dict["内存已用/G"] = float(re.sub('[^0-9.]',"",h.memusage))
+            json_list.append(json_dict)
+        return HttpResponse(json.dumps(json_list),content_type='application/json')
+
+
+class GetDatastoreResource(View):
+    '''
+    获取存储使用率
+    '''
+    def get(self,request):
+        json_list =[]
+        data = DataStores.objects.all()
+        for d in data:
+            json_dict ={}
+            totalspace = float(re.sub('[^0-9.]',"",d.capacity))
+            freespace = float(re.sub('[^0-9.]',"",d.freespace))
+            usagespace = totalspace-freespace
+            json_dict["存储名"] = d.name
+            json_dict["总空间"] = totalspace
+            json_dict["剩余空间"] = freespace
+            json_dict["使用率"] = "%.2f%%" %(usagespace/totalspace*100)
+            json_list.append(json_dict)
+        return HttpResponse(json.dumps(json_list), content_type='application/json')

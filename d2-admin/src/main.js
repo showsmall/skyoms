@@ -8,8 +8,6 @@ import d2Admin from '@/plugin/d2admin'
 import store from '@/store/index'
 // d2-crud表格插件
 import D2Crud from '@d2-projects/d2-crud'
-// 图标
-// import '@/assets/icon/iconfont.css'
 
 Vue.use(D2Crud)
 

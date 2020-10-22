@@ -1,0 +1,21 @@
+
+
+VcenterData = {
+    'VC1':{
+        'host':'',
+        'user':'',
+        'pwd':''
+    },
+    'VC2':{
+        'host':'',
+        'user':'',
+        'pwd':''
+    },
+    'VC3':{
+        'host':'',
+        'user':'',
+        'pwd':''
+    }
+
+
+}

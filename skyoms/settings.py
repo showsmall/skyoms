@@ -26,7 +26,7 @@ SECRET_KEY = '623j)#lpzaybe0bat3b=#c#bjk6i%n5xue&10(xi_$@ep297%9'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'vms.apps.VmsConfig',
     'assets.apps.AssetsConfig',
+    'django_celery_beat',
+    'tyadmin_api_cli',
 ]
 
 AUTH_USER_MODEL ='users.Userprofile'
@@ -172,6 +174,7 @@ CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:8080",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+
 )
 CORS_ALLOW_METHODS = (
     'DELETE',
@@ -212,3 +215,29 @@ CACHES = {
         },
     },
 }
+
+# 设置上传文件的路径
+MEDIA_URL="/media/"
+MEDIA_ROOT=os.path.join(BASE_DIR,"media")
+
+
+# 配置celery
+
+# 使用redis作为broker
+REDIS_HOST = 'redis://:Redis@123@127.0.0.1:6379/1'
+# 关闭 UTC
+CELERY_ENABLE_UTC = False
+# 设置 django-celery-beat 真正使用的时区
+CELERY_TIMEZONE = TIME_ZONE
+# 使用 timezone naive 模式，不存储时区信息，只存储经过时区转换后的时间
+DJANGO_CELERY_BEAT_TZ_AWARE = False
+# 配置 celery 定时任务使用的调度器，使用django_celery_beat插件用来动态配置任务
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_RESULT_BACKEND = 'redis://:Redis@123@127.0.0.1:6379/3'
+
+
+
+

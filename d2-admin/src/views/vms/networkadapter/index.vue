@@ -67,7 +67,7 @@ name: 'networkadapter',
     //获取网络信息
     getNetworkadapterData() {
       getnetworkadapter().then(res=>{
-        this.table.data = res;
+        this.table.data = res.results;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)

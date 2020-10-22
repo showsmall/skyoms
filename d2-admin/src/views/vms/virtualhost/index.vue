@@ -39,17 +39,16 @@ name: 'virtualhost',
         columns:[
           {label:'ID',prop:'id'},
           {label:'虚拟机名称',prop:'name'},
-          {label: '数据中心',prop: 'datacenter'},
+          {label:'数据中心',prop:'datacenter'},
           {label:'宿主机',prop:'ip'},
           {label:'电源状态',prop:'powerState'},
-          {label:'CPU',prop:'cpunums'},
+          {label:'CPU核数',prop:'cpunums'},
           {label:'内存',prop:'memtotal'},
           {label:'网络',prop:'network'},
           {label:'系统',prop:'os'},
           {label:'CPU用量',prop:'cpuusage'},
           {label:'内存用量',prop:'memusage'},
           {label:'存储用量',prop:'store_usage'},
-
         ],
         data : [],
         size: 'mini',
@@ -74,7 +73,7 @@ name: 'virtualhost',
     //获取所以虚拟机信息
     getVirtualhostData() {
       getvirtualhost ().then(res=>{
-        this.table.data = res;
+        this.table.data = res.results;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)

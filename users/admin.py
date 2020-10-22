@@ -2,7 +2,10 @@ from django.contrib import admin
 from django.contrib.auth.models import Permission
 from users.models import UserMenu
 from users.models import UserRouter
+from django.contrib.auth.models import User
 
+class UserAdmin(admin.ModelAdmin):
+    fields = ['username',]
 
 class PermissionAdmin(admin.ModelAdmin):
     fields = ['name', 'content_type', 'codename']
@@ -31,4 +34,5 @@ class UserRouterAdmin(admin.ModelAdmin):
 admin.site.register(Permission, PermissionAdmin)
 admin.site.register(UserMenu, UserMenuAdmin)
 admin.site.register(UserRouter, UserRouterAdmin)
+admin.site.register(User,UserAdmin)
 

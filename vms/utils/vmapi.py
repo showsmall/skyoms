@@ -2,6 +2,7 @@
 
 from pyVim import connect
 from pyVmomi import vim
+
 import time
 import json
 

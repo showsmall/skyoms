@@ -3,7 +3,6 @@ from datetime import datetime
 # Create your models here.
 
 
-
 class DataCenters(models.Model):
     '''数据中心'''
     name = models.CharField(max_length=128,verbose_name=u'数据中心名',unique=True)
@@ -27,8 +26,6 @@ class DataCenters(models.Model):
         db_table = 'data_centers'
         verbose_name = u"数据中心"
         verbose_name_plural = verbose_name
-
-
 
 class Clusters(models.Model):
     '''集群'''
@@ -70,8 +67,7 @@ class DataStores(models.Model):
         verbose_name = u'存储'
         verbose_name_plural = verbose_name
 
-
-class  NetworkAdapters(models.Model):
+class NetworkAdapters(models.Model):
     '''网络'''
     name = models.CharField(max_length=64,verbose_name=u'分布式交换机名')
     datacenter = models.ForeignKey('DataCenters', verbose_name=u'数据中心',on_delete=models.CASCADE)
@@ -86,7 +82,6 @@ class  NetworkAdapters(models.Model):
         db_table = 'networkadapters'
         verbose_name = u'网络端口'
         verbose_name_plural = verbose_name
-
 
 class Dedicatedhosts(models.Model):
     '''宿主机'''
@@ -115,7 +110,6 @@ class Dedicatedhosts(models.Model):
         db_table = 'dedicatedhosts'
         verbose_name = u'宿主机'
         verbose_name_plural = verbose_name
-
 
 class VirtualHosts(models.Model):
     '''虚拟机'''

@@ -74,7 +74,7 @@ name: 'dedicatedhost',
     //获取宿主机信息
     getDedicatedhostData() {
       getdedicatedhost().then(res=>{
-        this.table.data = res;
+        this.table.data = res.results;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)

@@ -66,7 +66,7 @@ name: 'datastore',
     //获取集群信息
     getDatastoreData() {
       getdatastore().then(res=>{
-        this.table.data = res;
+        this.table.data = res.results;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)

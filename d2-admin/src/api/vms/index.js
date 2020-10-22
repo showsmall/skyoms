@@ -6,7 +6,6 @@ export function  getcluster(params) {
     params
   })
 }
-
 export function  getdatacenter(params) {
   return request ({
     url: process.env.VUE_APP_BASE_API + '/vms/datacenter/',
@@ -35,7 +34,6 @@ export function  getdedicatedhost(params) {
     params
   })
 }
-
 export function  getvirtualhost(params) {
   return request ({
     url: process.env.VUE_APP_BASE_API + '/vms/virtualhost/',
@@ -50,4 +48,17 @@ export function  getclusterhost(params) {
     params
   })
 }
-
+export function  gethostresource(params) {
+  return request ({
+    url: process.env.VUE_APP_BASE_API + '/vms/gethostresource/',
+    method: 'get',
+    params
+  })
+}
+export function  getdataresource(params) {
+  return request ({
+    url: process.env.VUE_APP_BASE_API + '/vms/getdataresource/',
+    method: 'get',
+    params
+  })
+}

@@ -17,7 +17,7 @@
         flex>
         <router-link to="/index" class="logo-group" :style="{width: asideCollapse ? asideWidthCollapse : asideWidth}" flex-box="0">
           <img v-if="asideCollapse" :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/icon-only.png`">
-          <img v-else :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/icon-only.png`">
+          <img v-else :src="`${$baseUrl}image/theme/${themeActiveSetting.name}/logo/all.png`">
         </router-link>
         <div class="toggle-aside-btn" @click="handleToggleAside" flex-box="0">
           <d2-icon name="bars"/>
@@ -28,7 +28,6 @@
           <!-- 如果你只想在开发环境显示这个按钮请添加 v-if="$env === 'development'" -->
           <d2-header-search @click="handleSearchClick"/>
           <d2-header-log/>
-          <d2-header-theme/>
           <d2-header-user/>
         </div>
       </div>
@@ -98,7 +97,6 @@ export default {
     d2MenuHeader,
     d2Tabs,
     d2HeaderSearch,
-    d2HeaderTheme,
     d2HeaderUser,
     d2HeaderLog
   },
