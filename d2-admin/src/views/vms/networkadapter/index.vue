@@ -1,8 +1,8 @@
 <template>
   <d2-container type="card">
     <template slot="header">网络</template>
-    <div class="d2-mb">
-      <el-button type="primary" @click="exportExcel">
+    <div class="download">
+      <el-button type="primary" size="mini" round @click="exportExcel">
         <d2-icon name="download"/>导出Excel
       </el-button>
     </div>
@@ -58,8 +58,7 @@ name: 'networkadapter',
       this.$export.excel({
         columns: this.table.columns,
         data: this.table.data,
-        //header: '导出excel',
-        merges: ['A1','E1']
+        title: '网络列表'
       }).then(()=>{
         this.$message('表格导出成功')
       })
@@ -78,5 +77,25 @@ name: 'networkadapter',
 </script>
 
 <style scoped>
+.handle-head {
+  padding-bottom: 5px;
+}
+.pagination {
+  float: right;
+  margin-top: 20px;
+}
+.search {
+  float: left;
+}
+.handle-input {
+  width: 300px;
+  display: inline-block;
+}
+.download {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-inside: 5px;
+  float: right;
+}
 
 </style>

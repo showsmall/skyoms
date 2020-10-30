@@ -16,6 +16,7 @@ from io import BytesIO
 from skyoms.expiring_token_authentication import ExpireTokenAuthentication
 from rest_framework import permissions
 from rest_framework.views import APIView
+from django.views import View
 import json
 import uuid
 import datetime
@@ -110,7 +111,6 @@ def user_login(request):
         finally:
             return JsonResponse(result)
 
-
 @csrf_exempt
 def user_captcha(request, image_uuid):
     if request.method == 'GET':
@@ -123,7 +123,6 @@ def user_captcha(request, image_uuid):
         except Exception as e:
             print(str(e))
         return HttpResponse(bf.getvalue(), content_type='image/png')
-
 
 class ListUserMenu(APIView):
     """用户有权限访问的菜单数据"""
@@ -151,7 +150,6 @@ class ListUserMenu(APIView):
             }
         finally:
             return JsonResponse(result)
-
 
 class ListUserRouter(APIView):
     """用户有权限访问的路由数据"""

@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 import os
+import pymysql
+pymysql.version_info = (1, 4, 13, "final", 0)
+pymysql.install_as_MySQLdb()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,10 +48,10 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'vms.apps.VmsConfig',
     'assets.apps.AssetsConfig',
-    #'django_celery_beat',
+    'django_celery_beat',
     'tyadmin_api_cli',
-    'captcha',
-    'tyadmin_api'
+    #'captcha',
+    #'tyadmin_api'
 ]
 
 AUTH_USER_MODEL ='users.Userprofile'
@@ -74,6 +77,7 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
+    'DATETIME_FORMAT': '%Y年%m月%d日 %H:%M',
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAuthenticated', ),
     "DEFAULT_AUTHENTICATION_CLASSES": (
@@ -97,7 +101,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         #'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'DIRS':['d2-admin/dist'],
+        'DIRS':['d2-admin/dist',os.path.join(BASE_DIR,'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -168,6 +172,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'd2-admin/dist'),
+    #os.path.join(BASE_DIR, "static")
 ]
 
 # CORS_ORIGIN_ALLOW_ALL = True
@@ -225,8 +230,6 @@ MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 
 # 配置celery
 
-# 使用redis作为broker
-REDIS_HOST = 'redis://:Redis@123@127.0.0.1:6379/1'
 # 关闭 UTC
 CELERY_ENABLE_UTC = False
 # 设置 django-celery-beat 真正使用的时区
@@ -240,6 +243,21 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_RESULT_BACKEND = 'redis://:Redis@123@127.0.0.1:6379/3'
 
+#邮箱验证码相关配置
+# 服务器名称
+EMAIL_HOST = 'mail.163.com'
+# 服务端口
+EMAIL_PORT = 25
+# 邮箱
+EMAIL_HOST_USER = 'test@jcwit.com'
+# 在邮箱中设置的客户端授权密码
+EMAIL_HOST_PASSWORD = '123456'
+
+EMAIL_USER_TLS = True
+#收件人看到的发件人
+EMAIL_FROM = 'Skyoms<test@jcwit.com>'
 
 
-
+TY_ADMIN_CONFIG = {
+    'GEN_APPS': ['users', 'auth','vms','assets','django_celery_beat']
+}

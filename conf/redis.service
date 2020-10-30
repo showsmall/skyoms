@@ -1,0 +1,14 @@
+[Unit]
+Description=Redis
+After=network.target
+
+[Service]
+Type=forking
+ExecStart=/usr/local/bin/redis-server /etc/redis/redis.conf
+ExecStop=/usr/locl/bin/redis-cli -h 127.0.0.1 -p 6379 shutdown
+
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

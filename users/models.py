@@ -1,15 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import Permission
 from django.contrib.auth.models import AbstractUser
-from tyadmin_api_cli.contants import MAIN_DISPLAY
 class UserMenu(models.Model):
     """用户菜单"""
     index = models.IntegerField(default=999, verbose_name=u'菜单索引', help_text=u'决定菜单显示顺序')
     path = models.CharField(max_length=50, null=True, blank=True, verbose_name=u'菜单路径')
     title = models.CharField(max_length=20, verbose_name=u'菜单名称')
     icon = models.CharField(max_length=20, null=True, blank=True, verbose_name=u'菜单图标')
-    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children', verbose_name=u'父级菜单',help_text=f'{MAIN_DISPLAY}__name')
-    permission = models.ForeignKey(Permission, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=u'菜单关联权限',help_text=f'{MAIN_DISPLAY}__name')
+    parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.CASCADE, related_name='children', verbose_name=u'父级菜单')
+    permission = models.ForeignKey(Permission, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=u'菜单关联权限')
 
     class Meta:
         db_table = 'users_menu'
@@ -87,7 +86,7 @@ class UserRouter(models.Model):
     title = models.CharField(max_length=30, verbose_name=u'路由中文标题')
     auth = models.BooleanField(default=True, verbose_name=u'是否需要验证')
     component = models.CharField(max_length=50, verbose_name=u'路由关联的页面组件')
-    permission = models.ForeignKey(Permission, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=u'路由关联权限',help_text=f'{MAIN_DISPLAY}__name')
+    permission = models.ForeignKey(Permission, null=True, blank=True, on_delete=models.SET_NULL, verbose_name=u'路由关联权限')
 
     class Meta:
         db_table = 'users_router'

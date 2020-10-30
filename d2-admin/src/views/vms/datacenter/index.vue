@@ -1,8 +1,8 @@
 <template>
   <d2-container type="card">
     <template slot="header">数据中心</template>
-    <div class="d2-mb">
-      <el-button type="primary" @click="exportExcel">
+    <div class="download">
+      <el-button type="primary" size="mini" round @click="exportExcel">
         <d2-icon name="download"/>导出Excel
       </el-button>
     </div>
@@ -17,7 +17,7 @@
         :key="index"
         :prop="item.prop"
         :label="item.label"
-        width="100">
+        :width="item.width">
       </el-table-column>
     </el-table>
   </d2-container>
@@ -38,16 +38,16 @@ name: 'datacenter',
       table: {
         columns:[
           {label:'ID',prop:'id'},
-          {label:'数据中心',prop:'name'},
-          {label:'CPU总计',prop:'cputotal'},
-          {label:'CPU使用量',prop:'cpuusage'},
-          {label:'内存总计',prop:'memtotal'},
-          {label:'内存使用量',prop:'memusage'},
-          {label:'存储总计',prop:'datatotal'},
-          {label:'存储剩余量',prop:'datafree'},
-          {label:'宿主机数量',prop:'numhosts'},
-          {label:'虚拟机数量',prop:'vmscount'},
-          {label:'CPU总核数',prop:'numcpuscores'},
+          {label:'数据中心',prop:'name',width:'150'},
+          {label:'CPU总计',prop:'cputotal',width:'130'},
+          {label:'CPU使用量',prop:'cpuusage',width:'130'},
+          {label:'内存总计',prop:'memtotal',width:'130'},
+          {label:'内存使用量',prop:'memusage',width:'130'},
+          {label:'存储总计',prop:'datatotal',width:'130'},
+          {label:'存储剩余量',prop:'datafree',width:'130'},
+          {label:'宿主机数量',prop:'numhosts',width:'110'},
+          {label:'虚拟机数量',prop:'vmscount',width:'110'},
+          {label:'CPU总核数',prop:'numcpuscores',width:'110'},
 
         ],
         data : [],
@@ -64,8 +64,7 @@ name: 'datacenter',
       this.$export.excel({
         columns: this.table.columns,
         data: this.table.data,
-        //header: '导出excel',
-        merges: ['A1','K1']
+        title: '数据中心列表'
       }).then(()=>{
         this.$message('表格导出成功')
       })
@@ -73,7 +72,7 @@ name: 'datacenter',
     //获取数据中心信息
     getDatacenterData() {
       getdatacenter().then(res=>{
-        this.table.data = res;
+        this.table.data = res.results;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)
@@ -84,5 +83,26 @@ name: 'datacenter',
 </script>
 
 <style scoped>
+.handle-head {
+  padding-bottom: 5px;
+}
+.pagination {
+  float: right;
+  margin-top: 20px;
+}
+.search {
+  float: left;
+}
+.handle-input {
+  width: 300px;
+  display: inline-block;
+}
+.download {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-inside: 5px;
+  float: right;
+}
 
 </style>
+

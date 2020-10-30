@@ -1,70 +1,53 @@
-from rest_framework import viewsets
 from django.views import View
 from django.http import HttpResponse
 from .serializer import DataCentersSerializer,DataStoresSerializer,ClustersSerializer,NetworkAdaptersSerializer,DedicatedhostsSerializer,VirtualHostsSerializer
-from rest_framework.pagination import PageNumberPagination
 from .models import Dedicatedhosts,VirtualHosts,DataStores,DataCenters,Clusters,NetworkAdapters
+from utils.BaseViews import BaseView
 
-class DefaultPagination(PageNumberPagination):
-    # 默认每页显示的数据条数
-    page_size = 10
-    # 获取URL参数中设置的每页显示数据条数
-    page_size_query_param = 'page_size'
 
-    # 获取URL参数中传入的页码key
-    page_query_param = 'page'
-
-    # 最大支持的每页显示的数据条数
-    max_page_size = 500
-
-class DataCentersViewSet(viewsets.ModelViewSet):
+class DataCentersViewSet(BaseView):
     queryset = DataCenters.objects.all().order_by("-ctime")
     serializer_class = DataCentersSerializer
-    #pagination_class = DefaultPagination
     filter_fields = ['name',]
     search_fields = ('name',)
     ordering_fields = ('ctime','name')
 
-class ClustersViewSet(viewsets.ModelViewSet):
+class ClustersViewSet(BaseView):
     queryset = Clusters.objects.all().order_by("-ctime")
     serializer_class = ClustersSerializer
     filter_fields = ['name',]
     search_fields = ('name',)
-    ordering_fields = ('ctime','name')
+    ordering_fields = ('ctime','name','id')
 
 
-class DataStoresViewSet(viewsets.ModelViewSet):
+class DataStoresViewSet(BaseView):
     queryset = DataStores.objects.all().order_by("-ctime")
     serializer_class = DataStoresSerializer
-    pagination_class = DefaultPagination
     filter_fields = ['name',]
     search_fields = ('name',)
     ordering_fields = ('ctime','name')
 
 
-class NetworkAdaptersViewSet(viewsets.ModelViewSet):
+class NetworkAdaptersViewSet(BaseView):
     queryset = NetworkAdapters.objects.all().order_by("-ctime")
     serializer_class = NetworkAdaptersSerializer
-    pagination_class = DefaultPagination
     filter_fields = ['name',]
     search_fields = ('name',)
     ordering_fields = ('ctime','name')
 
 
 
-class DedicatedhostsViewSet(viewsets.ModelViewSet):
+class DedicatedhostsViewSet(BaseView):
     queryset = Dedicatedhosts.objects.all().order_by("-ctime")
     serializer_class = DedicatedhostsSerializer
-    pagination_class = DefaultPagination
     filter_fields = ['name','uuid','powerState']
     search_fields = ('name','uuid')
     ordering_fields = ('ctime','name','uuid')
 
 
-class VirtualHostsViewSet(viewsets.ModelViewSet):
+class VirtualHostsViewSet(BaseView):
     queryset = VirtualHosts.objects.all().order_by("-ctime")
     serializer_class = VirtualHostsSerializer
-    pagination_class = DefaultPagination
     filter_fields = ['name','ip','powerState','os']
     search_fields = ('name','os')
     ordering_fields = ('ctime','name')

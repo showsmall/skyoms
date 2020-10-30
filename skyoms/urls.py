@@ -14,12 +14,12 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path,include,re_path
 from django.views.static import serve
 from .settings import MEDIA_ROOT
 from rest_framework.documentation import include_docs_urls
 from django.views.generic.base import TemplateView
-
+#from tyadmin_api.views import AdminIndexView
 
 
 
@@ -29,12 +29,13 @@ urlpatterns = [
     # django默认认证
     path('api-auth/', include('rest_framework.urls')),
     #rest文档页
-    path('docs/',include_docs_urls(title="devops")),
+    path('docs/',include_docs_urls(title="skyoms")),
     path('users/', include('users.urls')),
-    path('vms/',include('vms.urls')),
-    path('assets/',include('assets.urls')),
-    path('api/xadmin/v1/', include('tyadmin_api.urls')),
+    path('api/vms/',include('vms.urls')),
+    path('api/assets/',include('assets.urls')),
+    #path('api/xadmin/v1/', include('tyadmin_api.urls')),
+    #re_path('xadmin/', AdminIndexView.as_view(), name="admin_index"),
     #文件
     path('media/<path:path>',serve,{'document_root':MEDIA_ROOT}),
-    path('', TemplateView.as_view(template_name='index.html')),
+    re_path('', TemplateView.as_view(template_name='index.html')),
 ]

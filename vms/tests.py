@@ -1,10 +1,5 @@
 from django.test import TestCase
-
+import json
 # Create your tests here.
-from vms.models import DataCenters
-
-datacenter = DataCenters.objects.filter(name='Datacenter_201_1').values(id)
-
-
-print(datacenter)
-
+import time
+a = time.localtime(2606644)

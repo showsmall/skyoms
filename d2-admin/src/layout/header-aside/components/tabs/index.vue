@@ -103,7 +103,6 @@ export default {
      */
     handleContextmenu (event) {
       let target = event.target
-      // 解决 https://github.com/d2-projects/d2-admin/issues/54
       let flag = false
       if (target.className.indexOf('el-tabs__item') > -1) flag = true
       else if (target.parentNode.className.indexOf('el-tabs__item') > -1) {

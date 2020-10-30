@@ -1,15 +1,12 @@
 from django.db import models
-from django.core.exceptions import ValidationError
 from datetime import datetime
-from tyadmin_api_cli.contants import MAIN_DISPLAY
+from utils.BaseModels import BaseModel
 # Create your models here.
 
 
-class IDC(models.Model):
+class IDC(BaseModel):
     name = models.CharField(max_length=32, unique=True, verbose_name=u'机房', error_messages={'unique': '该机房已存在，请不要重复添加'})
-    servers = models.ManyToManyField('Hosts',verbose_name='主机', help_text=f'{MAIN_DISPLAY}__name')
-    ctime = models.DateTimeField(default=datetime.now, verbose_name=u'创建时间')
-    utime = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
+    servers = models.ManyToManyField('Hosts',verbose_name='主机',)
 
     def __str__(self):
         return self.name
@@ -19,7 +16,7 @@ class IDC(models.Model):
         verbose_name = u"机房"
         verbose_name_plural = verbose_name
 
-class Hosts(models.Model):
+class Hosts(BaseModel):
     ASSET_STATUS = (
         ('online','上线'),
         ('offline','下线')
@@ -38,10 +35,6 @@ class Hosts(models.Model):
     os_kernel = models.CharField(max_length=255, null=True, blank=True, verbose_name=u'系统内核')
     memory = models.CharField(max_length=12, verbose_name=u'内存/G', blank=True, null=True)
     disk = models.CharField(max_length=12, verbose_name=u'硬盘/G', blank=True, null=True)
-    ctime = models.DateTimeField(default=datetime.now, verbose_name=u'创建时间')
-    utime = models.DateTimeField(auto_now=True, verbose_name=u'更新时间')
-    desc = models.CharField(max_length=200, verbose_name=u'描述', blank=True, null=True)
-
     def __str__(self):
         return self.ip
 
@@ -50,11 +43,9 @@ class Hosts(models.Model):
         verbose_name = u'主机'
         verbose_name_plural = verbose_name
 
-class HostGroup(models.Model):
+class HostGroup(BaseModel):
     name = models.CharField(max_length=32,verbose_name=u'主机组名',unique=True)
-    host = models.ManyToManyField('Hosts',verbose_name='主机', help_text=f'{MAIN_DISPLAY}__name')
-    ctime = models.DateTimeField(default=datetime.now,verbose_name=u'创建时间')
-    utime = models.DateTimeField(auto_now=True,verbose_name=u'更新时间')
+    host = models.ManyToManyField('Hosts',verbose_name='主机')
     def __str__(self):
         return self.name
     class Meta:

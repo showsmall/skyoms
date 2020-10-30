@@ -6,11 +6,9 @@ import App from './App'
 import d2Admin from '@/plugin/d2admin'
 // store
 import store from '@/store/index'
-// d2-crud表格插件
-import D2Crud from '@d2-projects/d2-crud'
-
-Vue.use(D2Crud)
-
+// elementui
+import ElementUI from 'element-ui'
+Vue.use(ElementUI)
 // v-charts
 import VCharts from 'v-charts'
 Vue.use(VCharts)
@@ -23,7 +21,6 @@ import util from '@/libs/util.js'
 
 // 核心插件
 Vue.use(d2Admin)
-
 // 从后台获取动态路由
 util.router.init(router)
 

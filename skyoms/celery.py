@@ -1,16 +1,13 @@
 # -*- coding:utf-8 -*-
 from __future__ import absolute_import
 import os
-import django
+from celery import  Celery
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skyoms.settings")
-django.setup()
 
-from celery import  Celery
-from skyoms import settings
-
-# 使用redis作为消息队列，backend也默认为broker使用的队列服务
-app = Celery('skyoms',broker=settings.REDIS_HOST)
+app = Celery('skyoms',
+             broker='redis://:Redis@123@127.0.0.1:6379/1',
+             backend='redis://:Redis@123@127.0.0.1:6379/3')
 # 载入django配置文件中以 CELERY 开头的配置
 app.config_from_object('skyoms.settings',namespace='CELERY')
 
