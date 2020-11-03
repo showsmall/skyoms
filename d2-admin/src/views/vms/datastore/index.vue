@@ -16,7 +16,6 @@
     <el-table
       :data="table.data"
       style="width: 100%"
-      height="250"
       @sort-change="changeTableSort"
       v-if="table.data.length>0"
     >
@@ -60,7 +59,7 @@ name: 'datastore',
     return {
       table: {
         columns:[
-          {label:'ID',prop:'id',sort:'custom'},
+          //{label:'ID',prop:'id',sort:'custom'},
           {label:'存储名',prop:'name',sort:false},
           {label: '数据中心',prop: 'datacenter',sort: false},
           {label:'存储总计',prop:'capacity',sort: false},

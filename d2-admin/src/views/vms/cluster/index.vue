@@ -1,48 +1,60 @@
 <template>
   <d2-container type="card">
     <template slot="header">集群</template>
-    <div class="handle-head">
-    <div class="search" >
-      <el-input v-model="table.getParams.search" placeholder="请输入集群名"  class="handle-input mr5" size="mini"  ></el-input>
-      <el-button icon="el-icon-search"  size="mini" circle @click="getClusterData" style="margin-left: 10px"></el-button>
-      <el-button size="mini"  icon="el-icon-refresh" circle @click="refreshClick"></el-button>
-      </div>
-    <div class="download">
-        <el-button type="primary" size="mini" round @click="exportExcel">
-          <d2-icon name="download"/>导出Excel
-        </el-button>
-      </div>
-    </div>
-    <el-table
-        :data="table.data"
-        style="width: 100%"
-        height="250"
-        @sort-change="changeTableSort"
-        v-if="table.data.length>0"
+        <div class="handle-head">
+          <div class="filter">
+            <el-select v-model="table.getParams.datacenter__name" filterable class="d2-mr-5" size="mini"  placeholder="请选择数据中心"  @change="getClusterData">
+              <el-option
+                v-for="item in TreeData"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+
+              >
+              </el-option>
+            </el-select>
+          </div>
+          <div class="search" >
+            <el-input v-model="table.getParams.search" placeholder="请输入集群名"  class="handle-input mr5" size="mini"  ></el-input>
+            <el-button icon="el-icon-search"  size="mini" circle @click="getClusterData" style="margin-left: 10px"></el-button>
+            <el-button size="mini"  icon="el-icon-refresh" circle @click="refreshClick"></el-button>
+          </div>
+          <div class="download">
+            <el-button type="primary" size="mini" round @click="exportExcel">
+              <d2-icon name="download"/>导出Excel
+            </el-button>
+          </div>
+        </div>
+        <el-table
+          :data="table.data"
+          style="width: 100%"
+          height="250"
+          @sort-change="changeTableSort"
+          v-if="table.data.length>0"
         >
-        <el-table-column
-        v-for="(item,index) in table.columns"
-        :sortable=item.sort
-        :key="index"
-        :prop="item.prop"
-        :label="item.label"
-        :width="item.width"
-        show-overflow-tooltip>
-        </el-table-column>
+          <el-table-column
+            v-for="(item,index) in table.columns"
+            :sortable=item.sort
+            :key="index"
+            :prop="item.prop"
+            :label="item.label"
+            :width="item.width"
+            show-overflow-tooltip>
+          </el-table-column>
         </el-table>
-    <div class="d2-crud-footer">
-      <div class="d2-crud-pagination">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="table.getParams.page"
-      :page-sizes="[10, 20, 50,100,500]"
-      :page-size="table.getParams.page_size"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="table.total">
-    </el-pagination>
-    </div>
-    </div>
+        <div class="d2-crud-footer">
+          <div class="d2-crud-pagination">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :current-page.sync="table.getParams.page"
+              :page-sizes="[10, 20, 50,100,500]"
+              :page-size="table.getParams.page_size"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="table.total">
+            </el-pagination>
+          </div>
+        </div>
   </d2-container>
 
 </template>
@@ -66,13 +78,14 @@ export default {
     return {
       colOptions: [],
       colSelect: [],
+      TreeData:[
+        {value:'Datacenter_201_1',label:'Datacenter_201_1'},
+        {value:'Datacenter_201_2',label:'Datacenter_201_2'},
+        {value:'Datacenter_201_3',label:'Datacenter_201_3'},
+      ],
       table: {
         columns: [
-          {
-            label: 'ID',
-            prop: 'id',
-            sort:"custom",
-          },
+          //{label: 'ID',prop: 'id',sort:"custom"},
           {
             label: '集群名',
             prop: 'name',
@@ -118,14 +131,14 @@ export default {
           {
             label: '存储剩余量',
             prop: 'datafree',
-            sort:false,
+            sort:"custom",
             width: 130,
           },
           {
             label: '宿主机数量',
             prop: 'numshosts',
-            sort:false,
-            width:110,
+            sort:"custom",
+            width:120,
           },
           {
             label: '虚拟机数量',
@@ -133,6 +146,13 @@ export default {
             sort:"custom",
             width: 120,
           },
+          {
+            label: '状态',
+            prop: 'overallstatus',
+            sort: false,
+            width: 110
+
+          }
 
         ],
         data: [],
@@ -177,7 +197,9 @@ export default {
         page:1,
         page_size:10,
         search:'',
-        ordering:''
+        ordering:'',
+        datacenter__name: ''
+
       };
       this.getClusterData()
     },
@@ -209,11 +231,26 @@ export default {
 
       }
     },
+    handleNodeClick(data){
+      console.log(data.label)
+      this.table.getParams.datacenter__name=data.label
+      this.getClusterData()
+    }
+
   }
 }
 </script>
 
 <style scoped>
+.el-row {
+  margin-bottom: 20px;
+  &:last-child {
+   margin-bottom: 0;
+  }
+}
+.el-col {
+  border-radius: 4px;
+}
 .handle-head {
   padding-bottom: 5px;
 }
@@ -223,6 +260,10 @@ export default {
 }
 .search {
   float: left;
+}
+.filter {
+  float: left;
+  margin-right: 10px;
 }
 .handle-input {
   width: 300px;

@@ -1,4 +1,4 @@
-﻿#!/usr/bin/env      python
+#!/usr/bin/env      python
 # -*- coding: utf-8 -*-
 from pyVim import connect
 from pyVmomi import vim
@@ -255,10 +255,11 @@ class VcenterApi(object):
             memusage =  "%.2f G" % (host.summary.quickStats.overallMemoryUsage/1024.0)
             # 运行时间
             uptime = host.summary.quickStats.uptime
-
+            overallStatus = host.summary.overallStatus
             """运行状态"""
             # 主机连接状态
             connectionstate = host.runtime.connectionState
+            os = host.config.product.fullName
             # 主机电源状态
             powerstate = host.runtime.powerState
             # 主机是否处于维护模式
@@ -271,13 +272,13 @@ class VcenterApi(object):
             clustername = host.parent.name
             datacentername = self.datacentername
             # 多对多
-            network = [network.name for network in host.network]
+            #network = [network.name for network in host.network]
             datastore = [datastore.name for datastore in host.datastore]
             data = {
                 "name": name,
                 "clustername": clustername,
                 "datacentername": datacentername,
-                "network": network,
+                #"network": network,
                 "datastore": datastore,
                 "connectionstate": connectionstate,
                 "powerstate": powerstate,
@@ -295,6 +296,8 @@ class VcenterApi(object):
                 "memorysize": memorysize,
                 "memusage": memusage,
                 "uptime": uptime,
+                "overallStatus":overallStatus,
+                "os":os
             }
 
             host_list.append(data)
@@ -361,6 +364,7 @@ class VcenterApi(object):
 
             """config"""
             uuid = vm_machine.summary.config.uuid
+            os  = vm_machine.summary.config.guestFullName
             # 是否模版
             template = vm_machine.summary.config.template
             # vm文件路径
@@ -368,7 +372,7 @@ class VcenterApi(object):
             # cpu 颗数
             numcpu = vm_machine.summary.config.numCpu
             # 内存总大小
-            memtotal= vm_machine.summary.config.memorySizeMB
+            memtotal= "%d MB" %(vm_machine.summary.config.memorySizeMB)
             # 网卡数
             numethernetcards = vm_machine.summary.config.numEthernetCards
             # 虚拟磁盘数量
@@ -376,9 +380,9 @@ class VcenterApi(object):
             # 已使用存储容量
             storage_usage = "%.2fG" % (vm_machine.summary.storage.committed/1024/1024/1024.0)
             # cpu使用Mhz
-            cpuusage = vm_machine.summary.quickStats.overallCpuUsage
+            cpuusage = '%d Mhz' %(vm_machine.summary.quickStats.overallCpuUsage)
             # MB
-            memusage = vm_machine.summary.quickStats.guestMemoryUsage
+            memusage = '%d MB' %(vm_machine.summary.quickStats.guestMemoryUsage)
             # 开机时间
             uptime = vm_machine.summary.quickStats.uptimeSeconds
             # 运行状态
@@ -433,6 +437,7 @@ class VcenterApi(object):
                 "overallstatus": overallstatus,
                 "network": network,
                 "virtualdiskinfo": virtualdiskinfo,
+                "os":os
             }
 
             vm_list.append(data)

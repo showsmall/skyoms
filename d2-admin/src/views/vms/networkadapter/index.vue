@@ -17,9 +17,23 @@
         :key="index"
         :prop="item.prop"
         :label="item.label"
-        width="100">
+        :width="item.width"
+        show-overflow-tooltip>
       </el-table-column>
     </el-table>
+    <div class="d2-crud-footer">
+      <div class="d2-crud-pagination">
+        <el-pagination
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+          :current-page.sync="table.getParams.page"
+          :page-sizes="[10, 20, 50,100,500]"
+          :page-size="table.getParams.page_size"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="table.total">
+        </el-pagination>
+      </div>
+    </div>
   </d2-container>
 </template>
 
@@ -37,17 +51,22 @@ name: 'networkadapter',
     return {
       table: {
         columns:[
-          {label:'ID',prop:'id'},
-          {label:'网络名',prop:'name'},
-          {label: '数据中心',prop: 'datacenter'},
-          {label:'Vlan',prop:'vlanid'},
-          {label:'类型',prop:'type'},
+          //{label:'ID',prop:'id',width:80},
+          {label:'网络名',prop:'name',width:300},
+          {label: '数据中心',prop: 'datacenter',width: 180},
+          {label:'Vlan',prop:'vlanid',width:100},
+          {label:'类型',prop:'type',width:130},
 
         ],
         data : [],
         size: 'mini',
         stripe: 'true',
-        fit:'true'
+        fit:'true',
+        getParams:{
+          page:1,
+          page_size:10,
+        },
+        total:0,
 
       }
     }
@@ -65,13 +84,22 @@ name: 'networkadapter',
     },
     //获取网络信息
     getNetworkadapterData() {
-      getnetworkadapter().then(res=>{
+      getnetworkadapter(this.table.getParams).then(res=>{
         this.table.data = res.results;
+        this.table.total = res.count;
         console.log(this.table.data)
       }).catch(function (error){
         console.log(error)
       })
-    }
+    },
+    handleCurrentChange(page){
+      this.table.getParams.page=page
+      this.getNetworkadapterData()
+    },
+    handleSizeChange(size){
+      this.table.getParams.page_size = size
+      this.getNetworkadapterData()
+    },
   }
 }
 </script>

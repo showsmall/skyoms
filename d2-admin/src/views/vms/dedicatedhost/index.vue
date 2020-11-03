@@ -3,8 +3,8 @@
     <template slot="header">宿主机</template>
     <div class="handle-head">
       <div class="search" >
-        <el-input v-model="table.getParams.search" placeholder="请输入集群名"  class="handle-input mr5" size="mini"  ></el-input>
-        <el-button icon="el-icon-search"  size="mini" circle @click="getClusterData" style="margin-left: 10px"></el-button>
+        <el-input v-model="table.getParams.search" placeholder="请输入宿主机IP"  class="handle-input mr5" size="mini"  ></el-input>
+        <el-button icon="el-icon-search"  size="mini" circle @click="getDedicatedhostData" style="margin-left: 10px"></el-button>
         <el-button size="mini"  icon="el-icon-refresh" circle @click="refreshClick"></el-button>
       </div>
       <div class="download">
@@ -59,19 +59,21 @@ name: 'dedicatedhost',
     return {
       table: {
         columns:[
-          {label:'ID',prop:'id',sort:"custom",},
-          {label:'宿主机',prop:'name',sort:false,},
-          {label: '数据中心',prop: 'datacenter',sort:false,},
-          {label: '集群',prop: 'cluster',sort:false,},
-          {label:'连接状态',prop:'conState',sort:false,},
-          {label:'电源状态',prop:'powerState',sort:false,},
-          {label:'CPU类型',prop:'cpumodel',sort:false,},
-          {label:'CPU数量',prop:'cpunums',sort:false,},
-          {label:'CPU核数',prop:'cpucores',sort:false,},
-          {label:'CPU总量',prop:'cputotal',sort:false,},
-          {label:'CPU用量',prop:'cpuusage',sort:false,},
-          {label:'内存总量',prop:'memtotal',sort:false,},
-          {label:'内存用量',prop:'memusage',sort:false,},
+          //{label:'ID',prop:'id',sort:"custom",},
+          {label:'IP',prop:'name',sort:false,width:130},
+          {label: '数据中心',prop: 'datacenter',sort:false,width: 150},
+          {label: '集群',prop: 'cluster',sort:false,width: 150},
+          {label:'连接状态',prop:'conState',sort:false,width: 110},
+          {label:'电源状态',prop:'powerState',sort:false,width: 110},
+          {label:'CPU类型',prop:'cpumodel',sort:false,width:350},
+          {label:'CPU数量',prop:'cpunums',sort:false,width:110},
+          {label:'CPU核数',prop:'cpucores',sort:false,width: 110},
+          {label:'CPU总量',prop:'cputotal',sort:false,width: 130},
+          {label:'CPU用量',prop:'cpuusage',sort:"custom",width:130},
+          {label:'内存总量',prop:'memtotal',sort:false,width: 130},
+          {label:'内存用量',prop:'memusage',sort:"custom",width:130},
+          {label: '状态',prop:'status',sort: false,width: 110},
+          {label: '系统',prop: 'os',sort: false,width: 300},
         ],
         data : [],
         size: 'mini',

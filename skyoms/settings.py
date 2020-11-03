@@ -49,9 +49,6 @@ INSTALLED_APPS = [
     'vms.apps.VmsConfig',
     'assets.apps.AssetsConfig',
     'django_celery_beat',
-    'tyadmin_api_cli',
-    #'captcha',
-    #'tyadmin_api'
 ]
 
 AUTH_USER_MODEL ='users.Userprofile'
@@ -127,7 +124,7 @@ DATABASES = {
         'USER': 'root',
         'PASSWORD': '123456',
         'HOST': 'localhost',
-        'PORT': '33060'
+        'PORT': '3306'
     }
 }
 
@@ -243,21 +240,4 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_RESULT_BACKEND = 'redis://:Redis@123@127.0.0.1:6379/3'
 
-#邮箱验证码相关配置
-# 服务器名称
-EMAIL_HOST = 'mail.163.com'
-# 服务端口
-EMAIL_PORT = 25
-# 邮箱
-EMAIL_HOST_USER = 'test@jcwit.com'
-# 在邮箱中设置的客户端授权密码
-EMAIL_HOST_PASSWORD = '123456'
 
-EMAIL_USER_TLS = True
-#收件人看到的发件人
-EMAIL_FROM = 'Skyoms<test@jcwit.com>'
-
-
-TY_ADMIN_CONFIG = {
-    'GEN_APPS': ['users', 'auth','vms','assets','django_celery_beat']
-}

@@ -5,12 +5,12 @@ import time
 from vms.models import *
 
 from vms.utils.vmapi import VcenterApi
-
+from django.core.exceptions import ObjectDoesNotExist
 
 
 @celery_app.task
 def CollectDatacenterinfo(host,user,pwd):
-    print('开始采集Datacenterinfo' + time.strftime('%Y年%m月%d日 %X'))
+    print('开始采集数据中心' + time.strftime('%Y年%m月%d日 %X'))
     Vc=VcenterApi(host=host,user=user,pwd=pwd)
     v = Vc.get_datacenter_list()
     name = v['datacentername']
@@ -28,11 +28,11 @@ def CollectDatacenterinfo(host,user,pwd):
                              'datatotal': datatotal, 'datafree': datafree, 'vmscount': vmscount,
                              'numcpuscores':numcpuscores}
     DataCenters.objects.update_or_create(name=name,defaults=update_values)
-    return "Datacenter数据采集成功"
+    return "Datacenter---%s数据采集成功" %host
 
 @celery_app.task
 def CollectClusterinfo(host,user,pwd):
-    print('开始采集Clusterinfo' + time.strftime('%Y年%m月%d日 %X'))
+    print('开始采集集群信息' + time.strftime('%Y年%m月%d日 %X'))
     Vc=VcenterApi(host=host,user=user,pwd=pwd)
     res = Vc.get_cluster_list()
     for item in res:
@@ -53,11 +53,11 @@ def CollectClusterinfo(host,user,pwd):
                              'datatotal': datatotal, 'datafree': datafree, 'vmscount': vmscount,
                              'datacenter':datacenter}
         Clusters.objects.update_or_create(name=name,defaults=update_values)
-    return "Cluster数据采集成功"
+    return "Cluster-----%s数据采集成功"  %host
 
 @celery_app.task
 def CollectDatastoreinfo(host,user,pwd):
-    print('开始采集DataStoreinfo' + time.strftime('%Y年%m月%d日 %X'))
+    print('开始采集存储信息' + time.strftime('%Y年%m月%d日 %X'))
     Vc=VcenterApi(host=host,user=user,pwd=pwd)
     res = Vc.get_datastore_list()
     for item in res:
@@ -69,11 +69,11 @@ def CollectDatastoreinfo(host,user,pwd):
         update_values = {'name': name, 'capacity': capacity, 'freespace': freespace,
                              'datacenter':datacenter}
         DataStores.objects.update_or_create(name=name,defaults=update_values)
-    return "Datastore数据采集成功"
+    return "Datastore------%s数据采集成功" %host
 
 @celery_app.task
 def CollectNetworkinfo(host,user,pwd):
-    print('开始采集Networkinfo' + time.strftime('%Y年%m月%d日 %X'))
+    print('开始采集网络信息列表' + time.strftime('%Y年%m月%d日 %X'))
     Vc=VcenterApi(host=host,user=user,pwd=pwd)
     res = Vc.get_networkport_group_list()
     for item in res:
@@ -85,4 +85,82 @@ def CollectNetworkinfo(host,user,pwd):
         update_values = {'name': name, 'vlanid': vlanid, 'type': type,
                              'datacenter':datacenter}
         NetworkAdapters.objects.update_or_create(name=name,defaults=update_values)
-    return "Network数据采集成功"
+    return "Network-----%s数据采集成功"  %host
+
+@celery_app.task
+def CollectVirtualinfo(host,user,pwd):
+    print("开始采集虚拟机信息" +time.strftime('%Y年%m月%d日 %X' ))
+    Vc = VcenterApi(host=host,user=user,pwd=pwd)
+    res = Vc.get_vm_list()
+    for item in res:
+        name = item.get('name')
+        datacentername = item.get('datacentername')
+        datacenter = DataCenters.objects.get(name=datacentername)
+        hostname = item.get('host')
+        host = Dedicatedhosts.objects.get(name=hostname)
+        ipaddr = item.get('ipaddress')
+        if ipaddr is None:
+            ip = ''
+        else:
+            ip = ipaddr
+        conState = item.get('connectionstate')
+        powerState = item.get('powerstate')
+        cpunums = item.get('numcpu')
+        memtotal = item.get('memtotal')
+        os = item.get('os')
+        cpuusage = item.get('cpuusage')
+        memusage = item.get('memusage')
+        store_usage = item.get('storage_usage')
+        status = item.get('overallstatus')
+        update_values = {'name':name,'datacenter':datacenter,'host':host,'ip':ip,
+                        'conState':conState,'powerState':powerState,'cpuusage':cpuusage,
+                        'cpunums':cpunums,'memusage':memusage,'memtotal':memtotal,
+                        'os':os,'store_usage':store_usage,'status':status}
+        VirtualHosts.objects.update_or_create(name=name,defaults=update_values)
+
+
+    return  "Virtual-----%s数据采集成功"  %host
+
+@celery_app.task
+def CollectPhysicsinfo(host,user,pwd):
+    print("开始采集宿主机信息"+time.strftime('%Y年%m月%d日 %X' ))
+    Vc = VcenterApi(host=host,user=user,pwd=pwd)
+    res = Vc.get_host_list()
+    for item in res:
+        name = item.get("name")
+        datacentername = item.get('datacentername')
+        datacenter = DataCenters.objects.get(name=datacentername)
+        clustername = item.get('clustername')
+        cluster = Clusters.objects.get(name=clustername)
+        datastore = item.get("datastore")
+        conState = item.get('connectionstate')
+        powerState = item.get("powerstate")
+        uuid = item.get("uuid")
+        cpumodel = item.get("cpumodel")
+        vendor = "%s--%s" %(item.get("vendor"),item.get("model"))
+        cpunums = item.get("numcpupkgs")
+        cpucores = item.get("numcpucores")
+        cputhreads = item.get("numcputhreads")
+        cputotal = item.get("cpusize")
+        cpuusage = item.get("cpuusage")
+        memtotal = item.get("memorysize")
+        memusage = item.get("memusage")
+        status = item.get("overallStatus")
+        datastore_obj = DataStores.objects.filter(name__in=datastore)
+        os = item.get("os")
+        try:
+            obj = Dedicatedhosts.objects.get(name=name)
+        except ObjectDoesNotExist:
+            obj =Dedicatedhosts.objects.create(name=name,datacenter=datacenter,cluster=cluster,
+                                               conState=conState,powerState=powerState,uuid=uuid,
+                                               cpumodel=cpumodel,vendor=vendor,cpunums=cpunums,
+                                               cpucores=cpucores,cputhreads=cputhreads,cputotal=cputotal,
+                                               cpuusage=cpuusage,memtotal=memtotal,memusage=memusage,
+                                               status=status,os=os)
+            obj.datastore.add(*datastore_obj)
+            obj.save()
+        else:
+
+            obj.datastore.set(datastore_obj)
+            obj.save()
+    return "Physicsinfo----%s采集成功"  %host

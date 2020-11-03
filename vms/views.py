@@ -8,49 +8,48 @@ from utils.BaseViews import BaseView
 class DataCentersViewSet(BaseView):
     queryset = DataCenters.objects.all().order_by("-ctime")
     serializer_class = DataCentersSerializer
-    filter_fields = ['name',]
     search_fields = ('name',)
-    ordering_fields = ('ctime','name')
+    ordering_fields = ("ctime","numhosts","vmscount","datafree")
 
 class ClustersViewSet(BaseView):
     queryset = Clusters.objects.all().order_by("-ctime")
     serializer_class = ClustersSerializer
-    filter_fields = ['name',]
+    filter_fields = ['datacenter__name','overallstatus']
     search_fields = ('name',)
-    ordering_fields = ('ctime','name','id')
+    ordering_fields = ('ctime','vmscount','numshosts','datafree',)
 
 
 class DataStoresViewSet(BaseView):
     queryset = DataStores.objects.all().order_by("-ctime")
     serializer_class = DataStoresSerializer
-    filter_fields = ['name',]
+    filter_fields = ['datacenter__name',]
     search_fields = ('name',)
-    ordering_fields = ('ctime','name')
+    ordering_fields = ('ctime','freespace')
 
 
 class NetworkAdaptersViewSet(BaseView):
     queryset = NetworkAdapters.objects.all().order_by("-ctime")
     serializer_class = NetworkAdaptersSerializer
-    filter_fields = ['name',]
+    filter_fields = ['datacenter__name',]
     search_fields = ('name',)
-    ordering_fields = ('ctime','name')
+    #ordering_fields = ('ctime','name')
 
 
 
 class DedicatedhostsViewSet(BaseView):
     queryset = Dedicatedhosts.objects.all().order_by("-ctime")
     serializer_class = DedicatedhostsSerializer
-    filter_fields = ['name','uuid','powerState']
-    search_fields = ('name','uuid')
-    ordering_fields = ('ctime','name','uuid')
+    filter_fields = ['cluster__name','datacenter__name','powerState','conState','status']
+    search_fields = ('name',)
+    ordering_fields = ('ctime','memusage','cpuusage','cputhreads')
 
 
 class VirtualHostsViewSet(BaseView):
     queryset = VirtualHosts.objects.all().order_by("-ctime")
     serializer_class = VirtualHostsSerializer
-    filter_fields = ['name','ip','powerState','os']
-    search_fields = ('name','os')
-    ordering_fields = ('ctime','name')
+    filter_fields = ['datacenter__name','host__name','powerState','conState','status']
+    search_fields = ('name','ip')
+    ordering_fields = ('ctime','memtotal','store_usage')
 
 import json
 class GetClusterHost(View):
@@ -59,7 +58,11 @@ class GetClusterHost(View):
     '''
     def get(self,request):
         json_list =[]
-        clusters = Clusters.objects.all()
+        datacenter = request.GET.get('datacenter')
+        if datacenter:
+            clusters = Clusters.objects.filter(datacenter__name=datacenter)
+        else:
+            clusters = Clusters.objects.all()
         for c in clusters:
             json_dict ={}
             json_dict["集群"] = c.name
@@ -75,7 +78,11 @@ class GetDedicatedhostResource(View):
     '''
     def get(self,request):
         json_list = []
-        hosts = Dedicatedhosts.objects.all()
+        datacenter = request.GET.get('datacenter')
+        if datacenter:
+            hosts = Dedicatedhosts.objects.filter(datacenter__name=datacenter)
+        else:
+            hosts = Dedicatedhosts.objects.all()
         for h in  hosts:
             json_dict ={}
             json_dict["主机名"] = h.name
@@ -92,8 +99,12 @@ class GetDatastoreResource(View):
     获取存储使用率
     '''
     def get(self,request):
+        datacenter = request.GET.get('datacenter')
         json_list =[]
-        data = DataStores.objects.all()
+        if datacenter:
+            data = DataStores.objects.filter(datacenter__name=datacenter)
+        else:
+            data = DataStores.objects.all()
         for d in data:
             json_dict ={}
             totalspace = float(re.sub('[^0-9.]',"",d.capacity))

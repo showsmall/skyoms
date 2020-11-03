@@ -55,11 +55,6 @@ class DedicatedhostsSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='name'
     )
-    network= serializers.SlugRelatedField(
-        many=True,
-        read_only=True,
-        slug_field='name'
-    )
     class Meta:
         model = Dedicatedhosts
         fields = '__all__'
@@ -69,8 +64,8 @@ class VirtualHostsSerializer(serializers.ModelSerializer):
         read_only=True,
         slug_field='name'
     )
-    network = serializers.SlugRelatedField(
-        many=True,
+    host = serializers.SlugRelatedField(
+        many=False,
         read_only=True,
         slug_field='name'
     )
